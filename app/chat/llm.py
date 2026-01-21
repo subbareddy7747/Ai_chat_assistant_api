@@ -1,7 +1,16 @@
 import requests
 from app.core.config import LLM_API_KEY, LLM_MODEL
+import logging
+import os
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+
+
+
+logger = logging.getLogger(__name__)
+
+
 
 
 def call_llm(message: str) -> str:
@@ -9,7 +18,8 @@ def call_llm(message: str) -> str:
     Calls a real LLM API and returns a response.
     Raises Exception on failure (handled by route).
     """
-
+    api_key = os.getenv("LLM_API_KEY")
+    logger.error(f"LLM_API_KEY present? {bool(api_key)}")
     if not LLM_API_KEY:
         raise RuntimeError("LLM_API_KEY not configured")
 
