@@ -51,7 +51,7 @@ def test_unauthorized_access():
 
     assert response.status_code == 401
 
-def test_get_chat_history(client, monkeypatch):
+def test_get_chat_history(monkeypatch):
     monkeypatch.setattr(
         "app.chat.routes.call_llm",
         fake_llm
@@ -99,7 +99,7 @@ def test_get_chat_history(client, monkeypatch):
 
 
 
-def test_delete_chat(client, monkeypatch):
+def test_delete_chat(monkeypatch):
     monkeypatch.setattr(
         "app.chat.routes.call_llm",
         fake_llm
