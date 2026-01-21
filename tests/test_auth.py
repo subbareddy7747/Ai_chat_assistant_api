@@ -69,3 +69,4 @@ def test_invalid_login():
     )
 
     assert response.status_code == 401
+

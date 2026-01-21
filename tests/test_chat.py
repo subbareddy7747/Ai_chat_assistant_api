@@ -51,10 +51,23 @@ def test_unauthorized_access():
 
     assert response.status_code == 401
 
+def test_get_chat_history(client, monkeypatch):
+    monkeypatch.setattr(
+        "app.chat.routes.call_llm",
+        fake_llm
+    )
 
-def test_get_chat_history(monkeypatch):
-    monkeypatch.setattr(llm, "call_llm", fake_llm)
+    # 1️⃣ Register user
+    client.post(
+        "/api/auth/register",
+        json={
+            "username": "chatuser",
+            "email": "chat@example.com",
+            "password": "SecurePass123!"
+        }
+    )
 
+    # 2️⃣ Login user
     login = client.post(
         "/api/auth/login",
         json={
@@ -63,8 +76,17 @@ def test_get_chat_history(monkeypatch):
         }
     )
 
+    assert login.status_code == 200
     token = login.json()["access_token"]
 
+    # 3️⃣ Create chat
+    client.post(
+        "/api/chat",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"message": "Hello"}
+    )
+
+    # 4️⃣ Get history
     response = client.get(
         "/api/chat/history",
         headers={"Authorization": f"Bearer {token}"}
@@ -74,9 +96,26 @@ def test_get_chat_history(monkeypatch):
     assert "chats" in response.json()
 
 
-def test_delete_chat(monkeypatch):
-    monkeypatch.setattr(llm, "call_llm", fake_llm)
 
+
+
+def test_delete_chat(client, monkeypatch):
+    monkeypatch.setattr(
+        "app.chat.routes.call_llm",
+        fake_llm
+    )
+
+    # 1️⃣ Register
+    client.post(
+        "/api/auth/register",
+        json={
+            "username": "chatuser",
+            "email": "chat@example.com",
+            "password": "SecurePass123!"
+        }
+    )
+
+    # 2️⃣ Login
     login = client.post(
         "/api/auth/login",
         json={
@@ -87,6 +126,7 @@ def test_delete_chat(monkeypatch):
 
     token = login.json()["access_token"]
 
+    # 3️⃣ Create chat
     chat = client.post(
         "/api/chat",
         headers={"Authorization": f"Bearer {token}"},
@@ -95,9 +135,11 @@ def test_delete_chat(monkeypatch):
 
     chat_id = chat.json()["chat_id"]
 
+    # 4️⃣ Delete chat
     delete = client.delete(
         f"/api/chat/{chat_id}",
         headers={"Authorization": f"Bearer {token}"}
     )
 
     assert delete.status_code == 200
+
