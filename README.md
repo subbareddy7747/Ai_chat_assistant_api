@@ -25,7 +25,7 @@ The application includes persistent chat history, automated testing, CI/CD, and 
 - **Backend Framework:** FastAPI  
 - **Database:** SQLite + SQLAlchemy  
 - **Authentication:** JWT  
-- **Password Security:** argon (bcrypt)  
+- **Password Security:** argon2  
 - **LLM Integration:** External LLM API  
 - **Testing:** pytest, pytest-cov  
 - **Linting:** flake8  
