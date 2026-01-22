@@ -1,17 +1,13 @@
-from app.chat import llm
 from tests.conftest import client
+
 
 def fake_llm(message: str) -> str:
     return "mocked ai response"
 
 
 def test_send_chat_authenticated(monkeypatch):
-    
-    monkeypatch.setattr(
-    "app.chat.routes.call_llm",
-    fake_llm
-)
 
+    monkeypatch.setattr("app.chat.routes.call_llm", fake_llm)
 
     # Register & login
     client.post(
@@ -19,16 +15,13 @@ def test_send_chat_authenticated(monkeypatch):
         json={
             "username": "chatuser",
             "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     login = client.post(
         "/api/auth/login",
-        json={
-            "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+        json={"email": "chat@example.com", "password": "SecurePass123!"},
     )
 
     token = login.json()["access_token"]
@@ -36,7 +29,7 @@ def test_send_chat_authenticated(monkeypatch):
     response = client.post(
         "/api/chat",
         headers={"Authorization": f"Bearer {token}"},
-        json={"message": "Hello"}
+        json={"message": "Hello"},
     )
 
     assert response.status_code == 200
@@ -44,18 +37,13 @@ def test_send_chat_authenticated(monkeypatch):
 
 
 def test_unauthorized_access():
-    response = client.post(
-        "/api/chat",
-        json={"message": "Hello"}
-    )
+    response = client.post("/api/chat", json={"message": "Hello"})
 
     assert response.status_code == 401
 
+
 def test_get_chat_history(monkeypatch):
-    monkeypatch.setattr(
-        "app.chat.routes.call_llm",
-        fake_llm
-    )
+    monkeypatch.setattr("app.chat.routes.call_llm", fake_llm)
 
     # 1️⃣ Register user
     client.post(
@@ -63,17 +51,14 @@ def test_get_chat_history(monkeypatch):
         json={
             "username": "chatuser",
             "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     # 2️⃣ Login user
     login = client.post(
         "/api/auth/login",
-        json={
-            "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+        json={"email": "chat@example.com", "password": "SecurePass123!"},
     )
 
     assert login.status_code == 200
@@ -83,27 +68,20 @@ def test_get_chat_history(monkeypatch):
     client.post(
         "/api/chat",
         headers={"Authorization": f"Bearer {token}"},
-        json={"message": "Hello"}
+        json={"message": "Hello"},
     )
 
     # 4️⃣ Get history
     response = client.get(
-        "/api/chat/history",
-        headers={"Authorization": f"Bearer {token}"}
+        "/api/chat/history", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200
     assert "chats" in response.json()
 
 
-
-
-
 def test_delete_chat(monkeypatch):
-    monkeypatch.setattr(
-        "app.chat.routes.call_llm",
-        fake_llm
-    )
+    monkeypatch.setattr("app.chat.routes.call_llm", fake_llm)
 
     # 1️⃣ Register
     client.post(
@@ -111,17 +89,14 @@ def test_delete_chat(monkeypatch):
         json={
             "username": "chatuser",
             "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     # 2️⃣ Login
     login = client.post(
         "/api/auth/login",
-        json={
-            "email": "chat@example.com",
-            "password": "SecurePass123!"
-        }
+        json={"email": "chat@example.com", "password": "SecurePass123!"},
     )
 
     token = login.json()["access_token"]
@@ -130,16 +105,14 @@ def test_delete_chat(monkeypatch):
     chat = client.post(
         "/api/chat",
         headers={"Authorization": f"Bearer {token}"},
-        json={"message": "To delete"}
+        json={"message": "To delete"},
     )
 
     chat_id = chat.json()["chat_id"]
 
     # 4️⃣ Delete chat
     delete = client.delete(
-        f"/api/chat/{chat_id}",
-        headers={"Authorization": f"Bearer {token}"}
+        f"/api/chat/{chat_id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert delete.status_code == 200
-

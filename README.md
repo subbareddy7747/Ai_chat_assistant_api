@@ -25,7 +25,7 @@ The application includes persistent chat history, automated testing, CI/CD, and 
 - **Backend Framework:** FastAPI  
 - **Database:** SQLite + SQLAlchemy  
 - **Authentication:** JWT  
-- **Password Security:** passlib (bcrypt)  
+- **Password Security:** argon (bcrypt)  
 - **LLM Integration:** External LLM API  
 - **Testing:** pytest, pytest-cov  
 - **Linting:** flake8  
@@ -88,7 +88,11 @@ Ai_chat_assistant_api/
 
 ```bash
 python -m venv venv
-source venv/bin/activate
+#Linux
+source venv/bin/activate 
+
+#Windows
+venv\scripts\activate.bat
 pip install -r requirements.txt
 ```
 
@@ -132,8 +136,9 @@ flake8 app
 - Hosted on Render (free tier)
 - HTTPS via Cloudflare
 - Cold starts possible after inactivity
-
+https://ai-chat-assistant-api.onrender.com/
 ---
+
 
 ## 📄 License
 

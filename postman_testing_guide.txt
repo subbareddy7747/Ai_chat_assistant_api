@@ -1,0 +1,143 @@
+POSTMAN TESTING GUIDE
+
+BASE URLS
+
+Local (Development):
+http://127.0.0.1:8000
+
+Deployed (Render):
+https://ai-chat-assistant-api.onrender.com
+
+
+1) REGISTER USER
+
+Method: POST
+Endpoint:
+/api/auth/register
+
+Local:
+http://127.0.0.1:8000/api/auth/register
+
+Deployed:
+https://ai-chat-assistant-api.onrender.com/api/auth/register
+
+Request Body (JSON):
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "SecurePass123!"
+}
+
+Expected Response:
+{
+  "message": "User registered successfully",
+  "user_id": 1
+}
+
+
+2) LOGIN USER
+
+Method: POST
+Endpoint:
+/api/auth/login
+
+Local:
+http://127.0.0.1:8000/api/auth/login
+
+Deployed:
+https://ai-chat-assistant-api.onrender.com/api/auth/login
+
+Request Body (JSON):
+{
+  "email": "test@example.com",
+  "password": "SecurePass123!"
+}
+
+Expected Response:
+{
+  "access_token": "<JWT_TOKEN>",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+
+IMPORTANT:
+Copy the access_token. It is required for all chat endpoints.
+
+
+AUTHORIZATION SETUP (POSTMAN)
+
+Header:
+Authorization: Bearer <JWT_TOKEN>
+
+OR
+
+Postman Authorization Tab:
+Type: Bearer Token
+Token: <JWT_TOKEN>
+
+
+3) SEND CHAT MESSAGE
+
+Method: POST
+Endpoint:
+/api/chat
+
+Local:
+http://127.0.0.1:8000/api/chat
+
+Deployed:
+https://ai-chat-assistant-api.onrender.com/api/chat
+
+Headers:
+Authorization: Bearer <JWT_TOKEN>
+Content-Type: application/json
+
+Request Body (JSON):
+{
+  "message": "What is FastAPI?"
+}
+
+Expected Response:
+{
+  "chat_id": 1,
+  "user_message": "What is FastAPI?",
+  "ai_response": "FastAPI is a modern Python web framework...",
+  "timestamp": "2026-01-21T17:27:30Z"
+}
+
+
+4) GET CHAT HISTORY
+
+Method: GET
+Endpoint:
+/api/chat/history
+
+Local:
+http://127.0.0.1:8000/api/chat/history
+
+Deployed:
+https://ai-chat-assistant-api.onrender.com/api/chat/history
+
+Headers:
+Authorization: Bearer <JWT_TOKEN>
+
+Expected Response:
+{
+  "total": 3,
+  "chats": [
+    {
+      "chat_id": 1,
+      "user_message": "What is FastAPI?",
+      "ai_response": "FastAPI is a modern Python web framework...",
+      "timestamp": "2026-01-21T17:27:30Z"
+    }
+  ]
+}
+
+
+NOTES
+
+- All chat endpoints require JWT authentication
+- Users can access only their own data
+- If the LLM service fails, a fallback message is returned
+- SQLite database may reset on redeploy (Render free tier)

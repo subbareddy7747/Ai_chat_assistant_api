@@ -1,6 +1,14 @@
 # app/models.py
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Index
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    Text,
+    Index,
+)
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -23,7 +31,9 @@ class Chat(Base):
     __tablename__ = "chats"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True
+    )
     user_message = Column(Text, nullable=False)
     ai_response = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)

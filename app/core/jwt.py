@@ -13,7 +13,8 @@ def create_access_token(user_id: int) -> str:
     """
     expire = datetime.utcnow() + timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS)
 
-    payload = {"sub": str(user_id), "exp": expire}  # subject = user identifier
+    # subject = user identifier
+    payload = {"sub": str(user_id), "exp": expire}
 
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     return token

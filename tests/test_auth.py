@@ -1,4 +1,4 @@
-from tests.conftest import client 
+from tests.conftest import client
 
 
 def test_user_registration():
@@ -7,8 +7,8 @@ def test_user_registration():
         json={
             "username": "testuser",
             "email": "test@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     assert response.status_code == 201
@@ -21,8 +21,8 @@ def test_duplicate_email():
         json={
             "username": "user1",
             "email": "dup@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     response = client.post(
@@ -30,8 +30,8 @@ def test_duplicate_email():
         json={
             "username": "user2",
             "email": "dup@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     assert response.status_code == 409
@@ -43,16 +43,13 @@ def test_user_login_success():
         json={
             "username": "loginuser",
             "email": "login@example.com",
-            "password": "SecurePass123!"
-        }
+            "password": "SecurePass123!",
+        },
     )
 
     response = client.post(
         "/api/auth/login",
-        json={
-            "email": "login@example.com",
-            "password": "SecurePass123!"
-        }
+        json={"email": "login@example.com", "password": "SecurePass123!"},
     )
 
     assert response.status_code == 200
@@ -62,11 +59,7 @@ def test_user_login_success():
 def test_invalid_login():
     response = client.post(
         "/api/auth/login",
-        json={
-            "email": "doesnotexist@example.com",
-            "password": "wrong"
-        }
+        json={"email": "doesnotexist@example.com", "password": "wrong"},
     )
 
-    assert response.status_code == 401
-
+    assert response.status_code == 422

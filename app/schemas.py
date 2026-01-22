@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from pydantic import constr
 from typing import List
 
 # -------- AUTH SCHEMAS --------
@@ -10,12 +11,12 @@ from typing import List
 class UserRegister(BaseModel):
     username: str
     email: EmailStr
-    password: str
+    password: constr(min_length=8)
 
 
 class UserLogin(BaseModel):
     email: EmailStr
-    password: str
+    password: constr(min_length=8)
 
 
 class UserResponse(BaseModel):

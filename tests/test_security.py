@@ -1,8 +1,6 @@
 from app.core.security import get_password_hash, verify_password
 
 
-
-
 def test_hash_and_verify_password():
     password = "SecurePass123!"
     hashed = get_password_hash(password)

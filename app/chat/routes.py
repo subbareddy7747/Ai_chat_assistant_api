@@ -10,7 +10,9 @@ from app.chat.llm import call_llm
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
 
 
-@router.post("", response_model=schemas.ChatResponse, status_code=status.HTTP_200_OK)
+@router.post(
+    "", response_model=schemas.ChatResponse, status_code=status.HTTP_200_OK
+)
 def create_chat(
     payload: schemas.ChatCreate,
     db: Session = Depends(get_db),
@@ -24,7 +26,9 @@ def create_chat(
 
     # 2. Store chat in database
     chat = models.Chat(
-        user_id=current_user.id, user_message=payload.message, ai_response=ai_response
+        user_id=current_user.id,
+        user_message=payload.message,
+        ai_response=ai_response,
     )
 
     db.add(chat)
@@ -70,14 +74,20 @@ def get_chat_history(
 
 
 @router.get(
-    "/{chat_id}", response_model=schemas.ChatResponse, status_code=status.HTTP_200_OK
+    "/{chat_id}",
+    response_model=schemas.ChatResponse,
+    status_code=status.HTTP_200_OK,
 )
 def get_chat_by_id(
-    chat_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)
+    chat_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     chat = (
         db.query(models.Chat)
-        .filter(models.Chat.id == chat_id, models.Chat.user_id == current_user.id)
+        .filter(
+            models.Chat.id == chat_id, models.Chat.user_id == current_user.id
+        )
         .first()
     )
 
@@ -96,11 +106,15 @@ def get_chat_by_id(
 
 @router.delete("/{chat_id}", status_code=status.HTTP_200_OK)
 def delete_chat(
-    chat_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)
+    chat_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     chat = (
         db.query(models.Chat)
-        .filter(models.Chat.id == chat_id, models.Chat.user_id == current_user.id)
+        .filter(
+            models.Chat.id == chat_id, models.Chat.user_id == current_user.id
+        )
         .first()
     )
 
