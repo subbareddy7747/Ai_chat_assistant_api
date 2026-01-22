@@ -1,0 +1,66 @@
+🚀 Project Setup & Running Instructions
+
+Follow the steps below to set up and run the AI Chat Assistant API locally.
+
+✅ Step 1: Clone the Repository
+git clone https://github.com/subbareddy7747/Ai_chat_assistant_api.git
+cd Ai_chat_assistant_api
+
+✅ Step 2: Create a Virtual Environment
+python -m venv venv
+
+Activate the virtual environment
+
+Linux / macOS
+
+source venv/bin/activate
+
+
+Windows
+
+venv\Scripts\activate
+
+✅ Step 3: Install Dependencies
+pip install -r requirements.txt
+
+✅ Step 4: Run the Application
+
+Start the FastAPI server using Uvicorn:
+
+uvicorn app.main:app --reload
+
+
+Once the server is running, the application will be available at:
+
+http://127.0.0.1:8000
+
+✅ Step 5: Run Tests
+
+Run unit tests with coverage:
+
+pytest --cov=app
+
+✅ Step 6: Run Linting
+
+Check code quality using flake8:
+
+flake8 app
+
+✅ Step 7: Test APIs Using Swagger UI
+
+FastAPI provides an interactive API documentation interface.
+
+Open the following URL in your browser:
+
+http://127.0.0.1:8000/docs
+
+
+Using Swagger UI, you can:
+
+Register a user
+
+Log in to obtain a JWT token
+
+Authorize requests using the token
+
+Test protected APIs such as chat, history, update, and delete
